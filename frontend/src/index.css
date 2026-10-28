@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-mgm-bg text-gray-900 font-sans antialiased;
+  }
+}
+
+@layer components {
+  .mgm-gradient-bar {
+    background: linear-gradient(90deg, #374B47, #44BB66, #374B47);
+  }
+  .mgm-card {
+    @apply bg-white rounded-md shadow-sm border border-mgm-border;
+  }
+  .mgm-btn-primary {
+    @apply bg-mgm-dark text-white px-6 py-3 rounded-md font-medium hover:bg-mgm-dark/90 transition-colors disabled:opacity-50;
+  }
+  .mgm-btn-green {
+    @apply bg-mgm-green text-white px-6 py-3 rounded-md font-medium hover:bg-mgm-green/90 transition-colors disabled:opacity-50;
+  }
+  .mgm-btn-outline {
+    @apply border border-mgm-dark text-mgm-dark px-6 py-3 rounded-md font-medium hover:bg-mgm-dark hover:text-white transition-colors;
+  }
+  .mgm-input {
+    @apply w-full border border-gray-300 rounded-md px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-mgm-green focus:border-transparent;
+  }
+  .mgm-label {
+    @apply block text-sm font-medium text-gray-700 mb-1.5;
+  }
+}

@@ -1,0 +1,60 @@
+services:
+  # ── PostgreSQL baza podataka ──
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-whistleblower}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-whistleblower}
+      POSTGRES_DB: ${DB_NAME:-whistleblower}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-whistleblower}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Ne izlaži port u produkciji — samo interni Docker network
+    # Za lokalni pristup otkomentiraj:
+    # ports:
+    #   - "5432:5432"
+
+  # ── Backend + Frontend (jedan kontejner) ──
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-whistleblower}:${DB_PASSWORD:-whistleblower}@db:5432/${DB_NAME:-whistleblower}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM:-noreply@mgmfarm.ba}
+      NOTIFICATION_EMAIL_GENERAL: ${NOTIFICATION_EMAIL_GENERAL:-neuskladjenost@mgmfarm.ba}
+      NOTIFICATION_EMAIL_LEGAL: ${NOTIFICATION_EMAIL_LEGAL}
+      FIRST_RESPONSE_DAYS: ${FIRST_RESPONSE_DAYS:-7}
+      STATUS_UPDATE_DAYS: ${STATUS_UPDATE_DAYS:-30}
+      MAX_ATTACHMENT_SIZE_MB: ${MAX_ATTACHMENT_SIZE_MB:-10}
+      RETENTION_DAYS: ${RETENTION_DAYS:-730}
+      NODE_ENV: production
+      PORT: 3000
+    volumes:
+      - uploads:/app/uploads
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    healthcheck:
+      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:3000/api/health']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  pgdata:
+  uploads:
