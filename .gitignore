@@ -11,3 +11,4 @@ backend/dist/
 *.log
 .DS_Store
 pgdata/
+*.save
