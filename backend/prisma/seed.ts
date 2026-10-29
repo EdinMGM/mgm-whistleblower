@@ -12,7 +12,7 @@ const prisma = new PrismaClient();
  *
  * Korisničko ime i lozinka se mogu konfigurisati preko env varijabli:
  * SEED_ADMIN_USERNAME (default: admin)
- * SEED_ADMIN_PASSWORD (default: PromijeniMe123!)
+ * SEED_ADMIN_PASSWORD (obavezan, generisan u setup.sh)
  */
 async function main() {
   const username = process.env.SEED_ADMIN_USERNAME ?? 'admin';
