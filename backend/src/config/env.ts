@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import { z } from 'zod';
 
 // Učitaj .env fajl
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 // Zod šema za validaciju environment varijabli
 // Ako je bilo koja obavezna varijabla nedostaje, aplikacija neće startovati

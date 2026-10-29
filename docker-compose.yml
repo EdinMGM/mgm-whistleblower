@@ -14,10 +14,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    # Ne izlaži port u produkciji — samo interni Docker network
-    # Za lokalni pristup otkomentiraj:
-    # ports:
-    #   - "5432:5432"
+    # Za lokalni pristup (produkcija: zakomentiraj)
+    ports:
+      - "5432:5432"
 
   # ── Backend + Frontend (jedan kontejner) ──
   app:
