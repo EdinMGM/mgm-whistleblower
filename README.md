@@ -147,20 +147,34 @@ ce biti dostavljeni odvojeno. Do tada aplikacija normalno radi.
 
 ### Preduslovi
 - Docker Desktop instaliran
-- .env fajl popunjen
+- Node.js instaliran (za generisanje JWT_SECRET u setup skripti)
 
-### Koraci
+### Brzi nacin — setup.sh skripta (preporuceno)
+
+    git clone https://github.com/EdinMGM/mgm-whistleblower.git
+    cd mgm-whistleblower
+    ./setup.sh
+
+Skripta automatski:
+1. Kopira `.env.example` u `.env`
+2. Generise `JWT_SECRET` i upisuje ga u `.env`
+3. Postavlja `NODE_ENV=production`
+4. Pokrece `docker compose up -d --build`
+
+Nakon pokretanja:
+- App: http://localhost:3000
+- Admin login: http://localhost:3000/admin/login
+
+**OBAVEZNO:** Promijeniti admin lozinku nakon prvog prijavljivanja!
+(Default lozinka je dostavljena odvojeno — nije u ovom repozitoriju.)
+
+### Rucni nacin
 
     cp .env.example .env
     node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
     # Zalijepi rezultat u .env kao JWT_SECRET
     docker compose up -d --build
     curl http://localhost:3000/api/health
-
-Aplikacija: http://localhost:3000
-Admin login: http://localhost:3000/admin/login -> admin / PromijeniMe123!
-
-OBAVEZNO promijeniti admin lozinku nakon prvog prijavljivanja!
 
 ### Zaustavljanje
 
@@ -175,7 +189,7 @@ Sve varijable su u .env.example.
 
 ### Obavezne
 - DATABASE_URL — Konekcija na bazu (Docker: postgresql://whistleblower:whistleblower@db:5432/whistleblower)
-- JWT_SECRET — Tajna za JWT (min 32 karaktera)
+- JWT_SECRET — Tajna za JWT (min 32 karaktera) — setup.sh generise automatski
 - NOTIFICATION_EMAIL_GENERAL — Email za opste prijave (neuskladjenost@mgmfarm.ba)
 
 ### SMTP (rucno konfigurisanje)
@@ -248,6 +262,7 @@ Vazno: .env se NE pusha na GitHub (u .gitignore). Na serveru .env vec postoji.
 - XSS: React escape.
 - Prilozi: MIME validacija, max 10MB, cuvanje izvan public, UUID imena na disku.
 - Security headers: Helmet (HSTS, X-Frame-Options, X-Content-Type-Options).
+- .env je u .gitignore — tajne se ne pushaju na GitHub.
 
 ### Za podesiti na serveru
 - HTTPS: Reverse proxy (nginx/Cloudflare) sa TLS. Aplikacija ne terminira HTTPS.
@@ -293,7 +308,8 @@ Vazno: .env se NE pusha na GitHub (u .gitignore). Na serveru .env vec postoji.
     |   +-- vite.config.ts       # Vite config sa proxy
     +-- Dockerfile                # Multi-stage build
     +-- docker-compose.yml        # PostgreSQL + app
-    +-- .env.example              # Sve varijable okruzenja
+    +-- setup.sh                  # Automatski setup (kreira .env, generise JWT_SECRET, pokrece Docker)
+    +-- .env.example              # Sve varijable okruzenja (bez tajni)
     +-- .gitignore
     +-- .dockerignore
     +-- README.md                 # Ovaj fajl
@@ -319,4 +335,4 @@ Vazno: .env se NE pusha na GitHub (u .gitignore). Na serveru .env vec postoji.
 ## 17. KONTAKT
 
 Za pitanja oko koda, konfiguracije ili pristupa — kontaktiraj Edina Jasarspahica.
-SMTP parametri ce biti dostavljeni odvojeno.
+SMTP parametri i admin lozinka ce biti dostavljeni odvojeno.
