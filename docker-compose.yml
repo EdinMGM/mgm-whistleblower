@@ -44,6 +44,8 @@ services:
       MAX_ATTACHMENT_SIZE_MB: ${MAX_ATTACHMENT_SIZE_MB:-10}
       RETENTION_DAYS: ${RETENTION_DAYS:-730}
       NODE_ENV: production
+      SEED_ADMIN_USERNAME: ${SEED_ADMIN_USERNAME:-admin}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD}
       PORT: 3000
     volumes:
       - uploads:/app/uploads

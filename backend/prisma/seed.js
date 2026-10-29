@@ -5,7 +5,8 @@ const prisma = new PrismaClient();
 
 async function main() {
   const username = process.env.SEED_ADMIN_USERNAME || 'admin';
-  const password = process.env.SEED_ADMIN_PASSWORD || 'PromijeniMe123!';
+  const password = process.env.SEED_ADMIN_PASSWORD;
+  if (!password) throw new Error('SEED_ADMIN_PASSWORD nije postavljen u .env');
 
   const existing = await prisma.adminUser.findUnique({ where: { username } });
   if (existing) {

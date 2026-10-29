@@ -53,6 +53,20 @@ else
 fi
 
 echo ""
+# Generisi admin lozinku ako je prazna
+if grep -q "^SEED_ADMIN_PASSWORD=$" .env || grep -q "^SEED_ADMIN_PASSWORD= *$" .env; then
+  echo "🔑 Generišem admin lozinku..."
+  ADMIN_PASS=$(node -e "console.log(require('crypto').randomBytes(16).toString('hex'))")
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' "s|^SEED_ADMIN_PASSWORD=.*|SEED_ADMIN_PASSWORD=${ADMIN_PASS}|" .env
+  else
+    sed -i "s|^SEED_ADMIN_PASSWORD=.*|SEED_ADMIN_PASSWORD=${ADMIN_PASS}|" .env
+  fi
+  echo "✅ Admin lozinka generisana: ${ADMIN_PASS}"
+  echo "⚠️  SAČUVAJ OVO — ovo je tvoj admin password za prvi login!"
+  echo ""
+fi
+
 echo "🚀 Pokrećem Docker kontejnere..."
 if docker compose version &> /dev/null; then
   docker compose up -d --build
