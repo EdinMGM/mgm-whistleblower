@@ -149,24 +149,39 @@ ce biti dostavljeni odvojeno. Do tada aplikacija normalno radi.
 - Docker Desktop instaliran
 - Node.js instaliran (za generisanje JWT_SECRET u setup skripti)
 
-### Brzi nacin — setup.sh skripta (preporuceno)
+### Brzi nacin — setup skripte (preporuceno)
+
+Skripta automatski instalira Node.js i Docker ako nedostaju, kreira `.env`,
+generise `JWT_SECRET` i admin lozinku, pa pokrene Docker.
+
+**macOS:**
 
     git clone https://github.com/EdinMGM/mgm-whistleblower.git
     cd mgm-whistleblower
-    ./setup.sh
+    ./setup-mac.sh
 
-Skripta automatski:
-1. Kopira `.env.example` u `.env`
-2. Generise `JWT_SECRET` i upisuje ga u `.env`
-3. Postavlja `NODE_ENV=production`
-4. Pokrece `docker compose up -d --build`
+**Linux (Ubuntu/Debian/CentOS/RHEL):**
+
+    git clone https://github.com/EdinMGM/mgm-whistleblower.git
+    cd mgm-whistleblower
+    ./setup-linux.sh
+
+**Windows (PowerShell):**
+
+    git clone https://github.com/EdinMGM/mgm-whistleblower.git
+    cd mgm-whistleblower
+    .\setup-windows.ps1
+
+Napomena: Na Mac i Windows, ako Docker nije bio instaliran, skripta ga
+instalira i trazi da je ponovo pokrenes nakon sto se Docker Desktop pokrene.
+Na Linux, ako Docker nije bio instaliran, skripta ga instalira i trazi
+da se izlogujes i ulogujes ponovo (zbog docker grupe).
 
 Nakon pokretanja:
 - App: http://localhost:3000
-- Admin login: http://localhost:3000/admin/login
+- Admin login: http://localhost:3000/admin/login (username: admin, lozinka se ispisuje u terminalu)
 
-**OBAVEZNO:** Promijeniti admin lozinku nakon prvog prijavljivanja!
-(Default lozinka je dostavljena odvojeno — nije u ovom repozitoriju.)
+**OBAVEZNO:** Sacuvaj admin lozinku koju skripta ispisuje!
 
 ### Rucni nacin
 
